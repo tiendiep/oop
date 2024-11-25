@@ -5,27 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class District extends Model
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Member extends Model
 {
     use HasFactory;
 
-    protected $table = 'districts';
+    
+    protected $table = 'members';
 
-    protected $fillable = ['city_id', 'districtVn', 'districtKr'];
 
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
+    protected $fillable = ['name', 'gender', 'date'];
 
     public function addresses()
     {
         return $this->hasMany(Address::class);
     }
 }
-
-
-
-
-

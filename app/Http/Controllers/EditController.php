@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Repositories\UserRepositoryInterface;
 use App\Models\City;
 use App\Models\District;
+use App\Models\Address;
 use App\Models\Users;
 use Illuminate\Http\Request;
 
@@ -32,32 +33,43 @@ class EditController extends UserController
     
     public function update(Request $request, $id)
     {
-   
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'gender' => 'required|string',
-            'city_id' => 'required|exists:city,id',
-            'district_id' => 'required|exists:district,id',
-            'date' => 'required|date',
-        ]);
-
         
-        $data = $request->only(['name', 'gender', 'city_id', 'district_id', 'date']);
-
-        $user = Users::find($id);
-
-        if (!$user) {
-          
-            return response()->json([
-                'message' => 'Người dùng không tồn tại!',
-            ], 404);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'gender' => 'required|string|max:50',
+            'date' => 'required|date',
+            'city_id' => 'required|exists:cities,id',
+            'district_id' => 'required|exists:districts,id',
+        ]);
+    
+     
+        $user = Users::findOrFail($id);
+    
+       
+        $user->update([
+            'name' => $validated['name'],
+            'gender' => $validated['gender'],
+            'date' => $validated['date'],
+        ]);
+    
+   
+        $address = Address::where('user_id', $id)->first();
+        
+        if ($address) {
+           
+            $address->update([
+                'district_id' => $validated['district_id'],
+            ]);
+        } else {
+            
+            Address::create([
+                'user_id' => $user->id,
+                'district_id' => $validated['district_id'],
+            ]);
         }
+    
 
-      
-        $user->update($data);
-        return response()->json([
-            'message' => 'Người dùng đã được cập nhật!',
-            'data' => $user, 
-        ], 200);
+        return response()->json(['message' => 'User and address updated successfully'], 200);
     }
+    
 }

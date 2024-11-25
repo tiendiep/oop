@@ -2,19 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
-    protected $table = 'city';
-    protected $fillable = ['citynameVn', 'citynameKorea'];
-    public function users()
-    {
-        return $this->hasMany(Users::class, 'cityId'); // 'cityId' là khóa ngoại trong bảng users
-    }
+    use HasFactory;
+
+
+    protected $table = 'cities';
+
+    
+    protected $fillable = ['citynameVn', 'citynameKr'];
+
+   
     public function districts()
     {
-        return $this->hasMany(District::class, 'city_id'); // 'city_id' là khóa ngoại trong bảng districts
+        return $this->hasMany(District::class);
     }
-    
 }
+

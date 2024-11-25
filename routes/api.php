@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\CreateController;
 use App\Http\Controllers\EditController;
 use App\Http\Controllers\SearchController;
@@ -39,7 +39,7 @@ Route::post('me', [AuthController::class, 'me']);
 Route::middleware(['auth:api'])->group(function () {
     // Route cho admin
     Route::middleware('role:admin')->group(function () {
-        Route::get('users', [UserController::class, 'index'])->name('users.index');
+        Route::get('users', [MemberController::class, 'index'])->name('users.index');
         Route::get('users/create', [CreateController::class, 'create'])->name('users.create');
         Route::post('users', [CreateController::class, 'store'])->name('users.store');
         Route::delete('users/{id}', [DeleteController::class, 'destroy'])->name('users.destroy');

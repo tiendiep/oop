@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Users;
+use App\Models\Member;
 use Illuminate\Database\Eloquent\Collection;
 
 interface UserRepositoryInterface
