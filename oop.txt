@@ -1,0 +1,32 @@
+interface Fowl {
+    public function layEgg(): Egg;
+}
+
+class Hen implements Fowl {
+    public function layEgg(): Egg {
+        return new Egg(static::class); 
+    }
+}
+
+class Egg {
+    private string $fowlType;
+    private bool $hasHatched = false;
+
+    public function __construct(string $fowlType) {
+        $this->fowlType = $fowlType;
+    }
+
+    public function hatch(): ?Fowl {
+        if ($this->hasHatched) {
+            throw new Exception("This egg has already hatched.");
+        }
+
+        $this->hasHatched = true;
+
+        if (class_exists($this->fowlType)) {
+            return new $this->fowlType(); 
+        }
+
+        throw new Exception("Fowl type '{$this->fowlType}' does not exist.");
+    }
+}
